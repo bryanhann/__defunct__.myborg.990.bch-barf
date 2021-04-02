@@ -1,0 +1,65 @@
+#!/bin/sh
+
+__usage__   () { _barf_msg no help provided; }
+__main__    () { _barf_msg "no operation defined"; }
+
+barf__omni () {
+    barf__init $0
+    barf__usage $* && return
+    barf__main $*
+}
+
+barf__init () {
+    export HERE=$(dirname $0)
+    export NAME=$(basename $0)
+    export SUBS=${HERE}/.${NAME}
+    [ -z "$PROG" ] && export PROG=$NAME || export PROG="${PROG} ${NAME}"
+}
+
+barf__yes_usage_on_null () {
+    export NHLP=
+}
+barf__usage () {
+    _barf_isusage () {
+        [ "$1" = ""       ] && [ -z $NHLP ] && return 0
+        [ "$1" = "-h"     ] && return 0
+        [ "$1" = "--help" ] && return 0
+        return 1
+    }
+    _barf_isusage $* || return 99
+    [ -d $SUBS ] && _barf_usage_subs
+    [ -d $SUBS ] || _barf_usage_nosubs
+    return 0
+}
+
+barf__main () {
+    # If no subcommand directory, defer to the __main__ function.
+    [ -d "${SUBS}"    ] || { __main__ $* ; return $? ; }
+    # If subcommand directory has the command, defer to it.
+    [ -f "${SUBS}/$1" ] && { ${SUBS}/$* ; return $? ; }
+    # If neither, report unknown.
+    echo "[$PROG]: unknown subcommand: [$1]"
+}
+
+#########################################################################################
+_barf_msg    () { echo "[$PROG]: $*" ; }
+#########################################################################################
+_barf_usage_nosubs () {
+cat << EOF1
+USAGE
+        $PROG
+EOF1
+__usage__
+}
+#########################################################################################
+_barf_usage_subs () {
+cat << EOF2
+USAGE
+        $PROG SUBCOMMAND
+SUBCOMMANDS
+EOF2
+for cmd in $(/bin/ls $SUBS); do
+    [ -f ${SUBS}/${cmd} ] && echo "        $cmd"
+done
+}
+

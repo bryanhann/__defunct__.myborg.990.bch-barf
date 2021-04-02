@@ -1,0 +1,2 @@
+source ${SOURCE}
+barf__init $*

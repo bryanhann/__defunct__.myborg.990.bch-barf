@@ -1,0 +1,26 @@
+#!/bin/sh
+export src=${barf_VIM_REMOTE}
+export dst=${barf_VIM_CONFIG}
+export bak=${barf_VIM_CONFIG}.backup
+
+source $SOURCE
+
+__install () {
+    echo  installing
+    [ -d "${dst}" ] && [ ! "$1" = "-f" ] &&  echo already something there. try -f.
+    [ -d "${dst}" ] && [ ! "$1" = "-f" ] &&  return 8
+    [ -d "${dst}" ] && rm -rf    ${dst}.backup
+    [ -d "${dst}" ] && mv ${dst} ${dst}.backup
+    git clone ${src} ${dst}
+    pushd ${dst} > /dev/null
+    source insitu.d/insitu
+    popd > /dev/null
+}
+__main__ () {
+    bch vim isinstalled && echo already installed && return
+    bch vim isinstalled || __install $*
+}
+barf__init $0
+barf__usage $* && exit
+barf__main $*
+

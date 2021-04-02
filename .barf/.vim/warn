@@ -1,0 +1,10 @@
+source $SOURCE
+__main__ () {
+    echo The Barf Vim is NOT INSTALLEDD
+}
+
+
+barf__init $0
+barf__usage $* && exit
+barf__main $*
+

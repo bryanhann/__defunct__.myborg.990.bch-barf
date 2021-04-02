@@ -1,0 +1,12 @@
+#!/bin/sh
+_export () { key=$1; shift; export $key="$*" ; }
+_export SOURCE   $(dirname $0)/bin/activate
+_export PROG
+
+
+source $SOURCE
+
+barf__yes_usage_on_null
+barf__init $0
+barf__usage $* && exit
+barf__main $*

@@ -1,0 +1,16 @@
+#!/bin/sh
+source $SOURCE
+testdir=${barf_VIM_CONFIG}/insitu.d_
+
+__main__ () {
+    [ -d ${testdir} ] && return 0 || return 1
+}
+__usage__ () {
+    echo
+    echo 'Is bch_vim installed?'
+    echo "    exit 0 if true"
+    echo "    exit 1 if false"
+}
+
+barf__omni $*
+

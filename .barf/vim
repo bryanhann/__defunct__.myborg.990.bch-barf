@@ -1,0 +1,15 @@
+#!/bin/sh
+source $SOURCE
+
+export barf_VIM_CONFIG=${HOME}/.config/vim
+export barf_VIM_REMOTE=https://github.com/bryanhann/.config.vim
+
+__usage__ () {
+    echo extra usage
+}
+barf__init $0
+barf__usage !n $* && exit
+echo 777 [$?]
+echo 76 $*
+barf__main $*
+
