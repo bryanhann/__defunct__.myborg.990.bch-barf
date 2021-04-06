@@ -1,0 +1,9 @@
+echo ${BCH_BARF_ROOT}
+pushd $(dirname $0)
+foo=${BCH_BARF_ROOT}/hide/foo
+echo >> ${foo}
+cat ${foo}
+git add ${foo}
+git commit -m "Automod: $*"
+git push
+popd
