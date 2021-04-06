@@ -1,1 +1,2 @@
 export PATH=${PATH}:${PWD}
+export BCH_BARF_ROOT=${PWD}
